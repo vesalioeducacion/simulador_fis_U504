@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FÍSICA - Ecuación de Onda Viajera, Impulso y Rapidez en Cuerdas Tensas (Facultad de Cs. Médicas - UCCuyo)</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- KaTeX para renderizado matemático formal de alta precisión -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathWhenReady()"></script>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts: Outfit & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: #f7f9f6;
+      color: #1e293b;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Paleta Institucional UCCuyo (Verde Oliva y Contrastes Biofísicos) */
+    .text-accent { color: #436600; }
+    .bg-accent { background-color: #436600; }
+    .bg-accent-hover:hover { background-color: #324d00; }
+    .bg-accent-light { background-color: #f1f6eb; }
+    .border-accent { border-color: #436600; }
+
+    .text-primary { color: #436600; }
+    .bg-primary { background-color: #436600; }
+    .bg-primary-dark { background-color: #324d00; }
+    .border-primary { border-color: #436600; }
+    
+    .focus-accent:focus {
+      border-color: #436600;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(67, 102, 0, 0.2);
+    }
+    
+    input[type=range] {
+      accent-color: #436600;
+    }
+    .grid-bg {
+      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .badge-katex .katex {
+      font-size: 1.05em;
+    }
+    canvas {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col justify-between selection:bg-accent/20 text-gray-800">
+
+  <!-- Cabecera Institucional UCCuyo -->
+  <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50 no-math">
+    <div class="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-white font-bold text-xl shadow-md">
+          FIS
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-gray-800 tracking-wide uppercase">FÍSICA MÉDICA Y BIOFÍSICA</h1>
+          <p class="text-xs text-gray-500 font-semibold">Curso de Ingreso a Medicina (Facultad de Cs. Médicas - UCCuyo)</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <!-- Botón Vademécum Teórico -->
+        <button onclick="openFormulasModal()" class="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg border border-gray-200 hover:bg-gray-200 transition">
+          <i class="fa-solid fa-book-bookmark text-accent"></i>
+          <span class="hidden sm:inline">Vademécum</span>
+        </button>
+        <!-- Botón Guía de Uso -->
+        <button onclick="openTutorial()" class="flex items-center gap-1.5 px-3 py-1.5 bg-accent text-white text-xs font-semibold rounded-lg shadow-sm hover:opacity-90 transition">
+          <i class="fa-solid fa-circle-question"></i>
+          <span>Guía de Uso</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido Principal con Barra Lateral -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 flex flex-col lg:flex-row gap-6">
+    
+    <!-- Menú de Navegación Lateral -->
+    <nav class="w-full lg:w-64 shrink-0 lg:shrink-0 flex flex-row lg:flex-col gap-2 bg-white p-3 rounded-2xl shadow-sm border border-gray-200 overflow-x-auto lg:overflow-x-visible whitespace-nowrap lg:whitespace-normal sticky top-20 h-fit" id="navTabs">
+      <button onclick="switchTab('mod1')" id="tab-btn-mod1" data-tab="mod1" class="nav-btn bg-accent text-white flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold transition shadow-sm flex items-center gap-2">
+        <i class="fa-solid fa-chart-line"></i> <span>1. Cinemática $y(x,t)$</span>
+      </button>
+      <button onclick="switchTab('mod2')" id="tab-btn-mod2" data-tab="mod2" class="nav-btn text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-medium transition flex items-center gap-2">
+        <i class="fa-solid fa-scale-balanced"></i> <span>2. Deducción por Impulso</span>
+      </button>
+      <button onclick="switchTab('mod3')" id="tab-btn-mod3" data-tab="mod3" class="nav-btn text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-medium transition flex items-center gap-2">
+        <i class="fa-solid fa-arrows-split-up-and-left"></i> <span>3. Banco de Medios ($F$ y $\mu$)</span>
+      </button>
+      <button onclick="switchTab('mod4')" id="tab-btn-mod4" data-tab="mod4" class="nav-btn text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-medium transition flex items-center gap-2 border-t lg:border-t border-gray-100">
+        <i class="fa-solid fa-heart-pulse text-accent"></i> <span>4. Biofísica Médica</span>
+      </button>
+    </nav>
+
+    <!-- Área de Contenido Dinámico -->
+    <div class="flex-1 space-y-6 min-w-0">
+
+      <!-- ========================================================================= -->
+      <!-- SECCIÓN 1: MÓDULO 1 - CINEMÁTICA MULTIVARIABLE y(x,t)                       -->
+      <!-- ========================================================================= -->
+      <div id="view-mod1" class="space-y-6">
+
+        <!-- Barra Superior de Controles de Reproducción y Presets -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1">Proyección Visual:</span>
+            <button onclick="setViewMode('continuous')" id="view-btn-continuous" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-accent-light text-accent border border-accent/20 transition">
+              <i class="fa-solid fa-film mr-1"></i> Continua $y(x,t)$
+            </button>
+            <button onclick="setViewMode('snapshot')" id="view-btn-snapshot" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-700 transition">
+              <i class="fa-solid fa-camera mr-1"></i> Foto en $x$ ($t=t_0$)
+            </button>
+            <button onclick="setViewMode('history')" id="view-btn-history" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 transition">
+              <i class="fa-solid fa-clock-rotate-left mr-1"></i> Historia en $t$ ($x=x_0$)
+            </button>
+          </div>
+
+          <!-- Botones de Control de Simulación -->
+          <div class="flex items-center gap-2">
+            <button id="btn-play-pause" onclick="togglePlay()" class="px-4 py-2 rounded-xl bg-accent hover:bg-accent-hover text-white font-semibold text-xs flex items-center gap-2 shadow-sm transition">
+              <svg id="icon-play" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg>
+              <span id="label-play">Pausar (Space)</span>
+            </button>
+            <button onclick="stepForward()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs flex items-center gap-1 transition" title="Avanzar un fotograma">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
+              Paso
+            </button>
+            <button onclick="resetSimulation()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs flex items-center gap-1 transition" title="Reiniciar">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Reiniciar
+            </button>
+          </div>
+        </div>
+
+        <!-- Banner Teórico Conceptual -->
+        <div class="bg-accent-light border border-accent/20 rounded-2xl p-4 text-xs sm:text-sm text-slate-700">
+          <div class="flex items-start gap-3">
+            <span class="w-2.5 h-2.5 rounded-full bg-accent mt-1.5 shrink-0 animate-pulse"></span>
+            <div>
+              <strong class="text-accent text-sm block mb-0.5">Naturaleza Multivariable de la Onda Viajera y Distinción Cinemática</strong>
+              La onda viaja en la dirección horizontal $+x$ con velocidad de fase <strong class="text-slate-900">$v = \lambda \cdot f = \sqrt{F/\mu}$</strong>. 
+              Sin embargo, las partículas de la cuerda <span class="text-accent font-bold underline decoration-accent/40">no se desplazan horizontalmente</span>: 
+              oscilan únicamente en el eje vertical $y$ con velocidad transversal instantánea $v_y = \frac{\partial y}{\partial t}$ y aceleración transversal $a_y = \frac{\partial^2 y}{\partial t^2}$.
+            </div>
+          </div>
+        </div>
+
+        <!-- Layout Central: Canvas y Controles -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+          <!-- Columna Izquierda: Canvas del Simulador Principal (8 cols) -->
+          <div class="lg:col-span-8 space-y-4">
+            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm flex flex-col">
+              
+              <!-- Cabecera de Estado del Canvas -->
+              <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-accent animate-pulse"></span>
+                  <span id="hud-mode-title" class="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                    Onda Progresiva $y(x, t) = A \operatorname{sen}(kx - \omega t)$
+                  </span>
+                </div>
+                <div class="flex items-center gap-3 text-xs text-slate-600 font-mono" id="hud-quick-stats">
+                  v = 10.0 m/s | λ = 6.67 m | f = 1.50 Hz
+                </div>
+              </div>
+
+              <!-- Canvas Interactivo -->
+              <div class="relative w-full h-80 sm:h-96 bg-gradient-to-b from-slate-50 to-white grid-bg overflow-hidden cursor-crosshair">
+                <canvas id="canvas-wave" class="w-full h-full block"></canvas>
+
+                <div class="absolute bottom-2 left-3 right-3 pointer-events-none flex flex-wrap items-center justify-between bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-xl border border-slate-200 text-[11px] text-slate-600 shadow-sm">
+                  <div class="flex items-center gap-3">
+                    <span class="flex items-center gap-1.5">
+                      <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span>
+                      Partícula $x_0$ (Prueba)
+                    </span>
+                    <span class="flex items-center gap-1.5">
+                      <span class="w-3 h-0.5 bg-rose-600 rounded"></span> $\vec{v}_y$
+                    </span>
+                    <span class="flex items-center gap-1.5">
+                      <span class="w-3 h-0.5 bg-amber-500 rounded"></span> $\vec{a}_y$
+                    </span>
+                    <span class="flex items-center gap-1.5">
+                      <span class="w-3 h-0.5 bg-accent rounded"></span> $\vec{v}_{\text{onda}}$
+                    </span>
+                  </div>
+                  <div id="probe-coords" class="font-mono text-slate-700 hidden sm:inline">
+                    x = 3.00 m, y = 0.00 m
+                  </div>
+                </div>
+              </div>
+
+              <!-- Fila de Estado Instantáneo en 4 Cajas -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 divide-x divide-y sm:divide-y-0 divide-slate-200 border-t border-slate-200 bg-white text-center">
+                <div class="p-3">
+                  <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Rapidez de Onda</p>
+                  <p id="math-speed-stat" class="text-base font-bold text-accent font-mono mt-0.5">$v = 10.0\text{ m/s}$</p>
+                  <span class="inline-block mt-0.5 text-[10px] px-1.5 py-0.5 rounded bg-accent-light text-accent font-medium">$\sqrt{F/\mu}$</span>
+                </div>
+                <div class="p-3">
+                  <p class="text-[11px] font-semibold text-sky-600 uppercase tracking-wider">Longitud de Onda</p>
+                  <p id="math-lambda-stat" class="text-base font-bold text-sky-700 font-mono mt-0.5">$\lambda = 6.67\text{ m}$</p>
+                  <span class="inline-block mt-0.5 text-[10px] px-1.5 py-0.5 rounded bg-sky-50 text-sky-700 font-medium">$v / f$</span>
+                </div>
+                <div class="p-3">
+                  <p class="text-[11px] font-semibold text-rose-600 uppercase tracking-wider">Vel. Transversal $v_y$</p>
+                  <p id="live-particle-vy" class="text-base font-bold text-rose-600 font-mono mt-0.5">+0.00 m/s</p>
+                  <span class="inline-block mt-0.5 text-[10px] px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 font-medium">$\partial y / \partial t$</span>
+                </div>
+                <div class="p-3">
+                  <p class="text-[11px] font-semibold text-amber-600 uppercase tracking-wider">Acel. Transversal $a_y$</p>
+                  <p id="live-particle-ay" class="text-base font-bold text-amber-600 font-mono mt-0.5">0.00 m/s²</p>
+                  <span class="inline-block mt-0.5 text-[10px] px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 font-medium">$\partial^2 y / \partial t^2$</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel de Ecuación de Estado Formal -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm space-y-3">
+              <div class="flex items-center justify-between">
+                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                  <i class="fa-solid fa-square-root-variable text-accent"></i> Ecuación de Onda Acoplada
+                </h4>
+                <div class="flex items-center gap-2">
+                  <button onclick="setWaveFunction('sin')" id="btn-fn-sin" class="px-2.5 py-1 rounded-lg bg-accent text-white font-medium text-xs shadow-2xs transition">
+                    $\operatorname{sen}(kx - \omega t)$
+                  </button>
+                  <button onclick="setWaveFunction('cos')" id="btn-fn-cos" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium text-xs transition">
+                    $\cos(kx - \omega t)$
+                  </button>
+                </div>
+              </div>
+              <div id="math-wave-eq" class="bg-slate-50 py-2.5 px-4 rounded-xl border border-slate-200 text-center font-mono text-accent text-sm sm:text-base">
+                $$y(x,t) = 1.20 \operatorname{sen}(0.94 x - 9.42 t)$$
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Parámetros Físicos de la Cuerda (4 cols) -->
+          <div class="lg:col-span-4 space-y-4">
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm space-y-4">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                  <i class="fa-solid fa-sliders text-accent"></i> Parámetros del Medio
+                </h3>
+                <span class="text-[10px] text-slate-400 font-mono">Tiempo real</span>
+              </div>
+
+              <!-- Tensión F -->
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-600 font-medium">Tensión elástica ($F$):</span>
+                  <span id="label-tension" class="font-mono font-bold text-accent">100 N</span>
+                </div>
+                <input type="range" id="slider-tension" min="10" max="400" step="5" value="100" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                <div class="flex justify-between text-[10px] text-slate-400 mt-0.5">
+                  <span>10 N (Cuerda floja)</span>
+                  <span>400 N (Alta tracción)</span>
+                </div>
+              </div>
+
+              <!-- Densidad Lineal mu -->
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-600 font-medium">Densidad lineal ($\mu = m/L$):</span>
+                  <span id="label-mu" class="font-mono font-bold text-sky-700">1.00 kg/m</span>
+                </div>
+                <input type="range" id="slider-mu" min="0.1" max="4.0" step="0.05" value="1.00" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                <div class="flex justify-between text-[10px] text-slate-400 mt-0.5">
+                  <span>0.10 kg/m (Hilo liviano)</span>
+                  <span>4.00 kg/m (Soga gruesa)</span>
+                </div>
+              </div>
+
+              <!-- Amplitud A -->
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-600 font-medium">Amplitud ($A$):</span>
+                  <span id="label-amp" class="font-mono font-bold text-slate-800">1.20 m</span>
+                </div>
+                <input type="range" id="slider-amp" min="0.2" max="2.0" step="0.05" value="1.20" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+              </div>
+
+              <!-- Frecuencia f -->
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-600 font-medium">Frecuencia ($f$):</span>
+                  <span id="label-freq" class="font-mono font-bold text-amber-700">1.50 Hz</span>
+                </div>
+                <input type="range" id="slider-freq" min="0.2" max="3.5" step="0.05" value="1.50" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+              </div>
+
+              <!-- Posición de la Partícula de Prueba x0 -->
+              <div class="pt-2 border-t border-slate-100">
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-600 font-medium">Sonda de partícula ($x_0$):</span>
+                  <span id="label-x0" class="font-mono font-bold text-rose-600">3.00 m</span>
+                </div>
+                <input type="range" id="slider-x0" min="0.5" max="15.0" step="0.1" value="3.00" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                <span class="text-[10px] text-slate-400">💡 También puedes hacer clic sobre el canvas para ubicar la sonda.</span>
+              </div>
+
+              <!-- Opciones de Visualización de Vectores -->
+              <div class="pt-2 border-t border-slate-100 space-y-2 text-xs">
+                <label class="flex items-center gap-2 text-slate-700 cursor-pointer">
+                  <input type="checkbox" id="check-vy" checked class="rounded text-rose-600 focus:ring-rose-500">
+                  <span class="font-medium">Mostrar vector velocidad transversal $\vec{v}_y$</span>
+                </label>
+                <label class="flex items-center gap-2 text-slate-700 cursor-pointer">
+                  <input type="checkbox" id="check-ay" checked class="rounded text-amber-600 focus:ring-amber-500">
+                  <span class="font-medium">Mostrar vector aceleración transversal $\vec{a}_y$</span>
+                </label>
+                <label class="flex items-center gap-2 text-slate-700 cursor-pointer">
+                  <input type="checkbox" id="check-particles" checked class="rounded text-accent focus:ring-accent">
+                  <span class="font-medium">Visualizar discretización de partículas</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Velocidad de Simulación -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex items-center justify-between text-xs">
+              <span class="text-slate-600 font-medium">Velocidad del motor:</span>
+              <select id="time-speed" onchange="setTimeScale(this.value)" class="bg-slate-50 border border-slate-300 text-slate-700 text-xs rounded-lg px-2.5 py-1.5 focus:border-accent outline-none">
+                <option value="0.25">Cámara lenta (0.25x)</option>
+                <option value="0.5">Lento (0.5x)</option>
+                <option value="1.0" selected>Tiempo real (1.0x)</option>
+                <option value="1.5">Rápido (1.5x)</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- SECCIÓN 2: MÓDULO 2 - DEDUCCIÓN POR IMPULSO Y MOMENTO                     -->
+      <!-- ========================================================================= -->
+      <div id="view-mod2" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-6">
+          <div class="max-w-3xl">
+            <span class="text-xs font-bold text-accent uppercase tracking-wider">Unidad Didáctica 2</span>
+            <h2 class="text-xl font-bold text-slate-900 mt-1">Deducción Dinámica de la Rapidez $v = \sqrt{F/\mu}$ por Teorema del Impulso</h2>
+            <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+              Demostración física rigurosa aplicando la 2ª Ley de Newton en forma de impulso a un pulso transversal en una cuerda sometida a tensión constante $F$.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Canvas Interactivo del Segmento en Movimiento (7 cols) -->
+            <div class="lg:col-span-7 bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col justify-between shadow-sm">
+              <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+                <span class="text-xs font-mono font-bold text-slate-700">
+                  <i class="fa-solid fa-diagram-project text-accent mr-1"></i> Diagrama de Cuerpo Libre del Frente Deformado
+                </span>
+                <button onclick="triggerImpulsePulse()" class="text-xs bg-accent hover:bg-accent-hover text-white font-semibold px-3 py-1.5 rounded-lg transition shadow-2xs flex items-center gap-1.5">
+                  <i class="fa-solid fa-play"></i> Enviar Impulso Transversal
+                </button>
+              </div>
+
+              <div class="relative w-full h-72 sm:h-80 bg-white rounded-xl border border-slate-200 my-3 overflow-hidden grid-bg">
+                <canvas id="canvas-impulse" class="w-full h-full block"></canvas>
+              </div>
+
+              <!-- Triángulos de Fuerza y Velocidad -->
+              <div class="grid grid-cols-2 gap-3 text-xs bg-white p-3 rounded-xl border border-slate-200">
+                <div>
+                  <span class="text-accent font-bold block mb-1">Triángulo de Fuerzas:</span>
+                  <p class="text-slate-600">
+                    Pendiente transversal: $\tan\theta = \frac{F_y}{F}$
+                  </p>
+                </div>
+                <div>
+                  <span class="text-sky-700 font-bold block mb-1">Triángulo de Desplazamientos:</span>
+                  <p class="text-slate-600">
+                    Relación cinemática: $\tan\theta = \frac{v_y \cdot t}{v \cdot t} = \frac{v_y}{v}$
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Demostración Paso a Paso (5 cols) -->
+            <div class="lg:col-span-5 space-y-3 text-xs">
+              <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-200 pb-2">
+                <i class="fa-solid fa-list-ol text-accent mr-1"></i> Cadena Formal de Deducción
+              </h3>
+
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <strong class="text-slate-800 block mb-1">1. Longitud y Masa Perturbada:</strong>
+                <p class="text-slate-600 mb-1">En el tiempo $t$, el frente avanza $\Delta x = v \cdot t$. La masa puesta en movimiento vertical es:</p>
+                <div class="text-center font-mono text-accent py-1 bg-white rounded-lg border border-slate-200">
+                  $$m = \mu \cdot \Delta x = \mu \cdot v \cdot t$$
+                </div>
+              </div>
+
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <strong class="text-slate-800 block mb-1">2. Teorema del Impulso y Cantidad de Movimiento:</strong>
+                <p class="text-slate-600 mb-1">El impulso transversal es igual a la cantidad de movimiento adquirida:</p>
+                <div class="text-center font-mono text-slate-800 py-1 bg-white rounded-lg border border-slate-200">
+                  $$I_y = F_y \cdot t = m \cdot v_y = (\mu \cdot v \cdot t) \cdot v_y$$
+                </div>
+              </div>
+
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <strong class="text-slate-800 block mb-1">3. Semejanza de Triángulos Geométricos:</strong>
+                <p class="text-slate-600 mb-1">Dado que la cuerda es inextensible, la pendiente geométrica iguala la de fuerzas:</p>
+                <div class="text-center font-mono text-slate-800 py-1 bg-white rounded-lg border border-slate-200">
+                  $$\frac{F_y}{F} = \frac{v_y}{v} \implies F_y = F \cdot \frac{v_y}{v}$$
+                </div>
+              </div>
+
+              <div class="p-3 bg-accent-light rounded-xl border border-accent/30">
+                <strong class="text-accent block mb-1">4. Cancelación y Fórmula Fundamental:</strong>
+                <p class="text-slate-700 mb-1">Sustituyendo $F_y$ en la ecuación del impulso, se cancelan $v_y$ y $t$:</p>
+                <div class="text-center font-mono text-accent py-1.5 bg-white rounded-lg border border-accent/20 font-bold text-sm">
+                  $$\left(F \frac{v_y}{v}\right) t = \mu v t v_y \implies v = \sqrt{\frac{F}{\mu}}$$
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- SECCIÓN 3: MÓDULO 3 - BANCO EXPERIMENTAL DE MEDIOS (F y mu)                 -->
+      <!-- ========================================================================= -->
+      <div id="view-mod3" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-6">
+          <div class="max-w-3xl">
+            <span class="text-xs font-bold text-accent uppercase tracking-wider">Unidad Didáctica 3</span>
+            <h2 class="text-xl font-bold text-slate-900 mt-1">Carrera de Pulsos: Dependencia Inercial ($\mu$) y Elástica ($F$)</h2>
+            <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+              Comprueba de manera simultánea cómo influyen la tensión y la masa por unidad de longitud en la rapidez de avance. Un medio denso (alta inercia $\mu$) retarda la onda, mientras que una alta tensión ($F$) acelera la restitución elástica.
+            </p>
+          </div>
+
+          <!-- Controles de Dos Cuerdas Paralelas -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- Cuerda A -->
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-sm space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-accent"></span>
+                  <h3 class="font-bold text-slate-900 text-sm">Cuerda A (Medio Liviano / Rápido)</h3>
+                </div>
+                <span id="speed-a-badge" class="text-xs font-mono font-bold bg-accent-light text-accent px-2 py-0.5 rounded-lg border border-accent/20">
+                  v_A = 20.0 m/s
+                </span>
+              </div>
+              <div class="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <div class="flex justify-between mb-1 text-slate-600">
+                    <span>Tensión $F_A$:</span>
+                    <span id="label-f-a" class="font-mono text-accent font-bold">100 N</span>
+                  </div>
+                  <input type="range" id="slider-f-a" min="20" max="400" step="10" value="100" class="w-full h-1.5 bg-slate-200 rounded cursor-pointer" oninput="updateDualExperiment()">
+                </div>
+                <div>
+                  <div class="flex justify-between mb-1 text-slate-600">
+                    <span>Densidad $\mu_A$:</span>
+                    <span id="label-mu-a" class="font-mono text-accent font-bold">0.25 kg/m</span>
+                  </div>
+                  <input type="range" id="slider-mu-a" min="0.05" max="1.5" step="0.05" value="0.25" class="w-full h-1.5 bg-slate-200 rounded cursor-pointer" oninput="updateDualExperiment()">
+                </div>
+              </div>
+            </div>
+
+            <!-- Cuerda B -->
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-sm space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                  <h3 class="font-bold text-slate-900 text-sm">Cuerda B (Medio Denso / Lento)</h3>
+                </div>
+                <span id="speed-b-badge" class="text-xs font-mono font-bold bg-rose-50 text-rose-700 px-2 py-0.5 rounded-lg border border-rose-200">
+                  v_B = 6.32 m/s
+                </span>
+              </div>
+              <div class="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <div class="flex justify-between mb-1 text-slate-600">
+                    <span>Tensión $F_B$:</span>
+                    <span id="label-f-b" class="font-mono text-rose-600 font-bold">100 N</span>
+                  </div>
+                  <input type="range" id="slider-f-b" min="20" max="400" step="10" value="100" class="w-full h-1.5 bg-slate-200 rounded cursor-pointer" oninput="updateDualExperiment()">
+                </div>
+                <div>
+                  <div class="flex justify-between mb-1 text-slate-600">
+                    <span>Densidad $\mu_B$:</span>
+                    <span id="label-mu-b" class="font-mono text-rose-600 font-bold">2.50 kg/m</span>
+                  </div>
+                  <input type="range" id="slider-mu-b" min="0.5" max="5.0" step="0.1" value="2.50" class="w-full h-1.5 bg-slate-200 rounded cursor-pointer" oninput="updateDualExperiment()">
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Pista de Carreras de Ondas -->
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-sm space-y-3">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-slate-600 font-mono font-semibold">
+                <i class="fa-solid fa-flag-checkered text-amber-500 mr-1"></i> Pista Experimental de Ondas (Longitud: 20 metros)
+              </span>
+              <button onclick="launchPulseRace()" class="px-4 py-2 bg-accent hover:bg-accent-hover text-white font-bold rounded-xl flex items-center gap-2 shadow-2xs transition">
+                <i class="fa-solid fa-burst"></i> ¡Disparar Pulsos Simultáneos!
+              </button>
+            </div>
+
+            <div class="relative w-full h-72 sm:h-80 bg-white rounded-xl border border-slate-200 overflow-hidden grid-bg">
+              <canvas id="canvas-dual" class="w-full h-full block"></canvas>
+            </div>
+
+            <!-- Telemetría Comparativa -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+              <div class="bg-white p-3 rounded-xl border border-slate-200">
+                <span class="text-accent font-bold block mb-1">Cuerda A (Liviana):</span>
+                <div class="flex justify-between text-slate-600">
+                  <span>Tiempo de tránsito ($20\text{ m}$):</span>
+                  <span id="time-transit-a" class="font-mono font-bold text-slate-800">1.00 s</span>
+                </div>
+              </div>
+
+              <div class="bg-white p-3 rounded-xl border border-slate-200">
+                <span class="text-rose-600 font-bold block mb-1">Cuerda B (Pesada):</span>
+                <div class="flex justify-between text-slate-600">
+                  <span>Tiempo de tránsito ($20\text{ m}$):</span>
+                  <span id="time-transit-b" class="font-mono font-bold text-slate-800">3.16 s</span>
+                </div>
+              </div>
+
+              <div class="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between">
+                <div>
+                  <span class="text-slate-500 block">Cociente $v_A / v_B$:</span>
+                  <span id="ratio-speed" class="font-mono text-base font-bold text-accent">3.16x</span>
+                </div>
+                <span class="text-[11px] text-slate-500 font-serif">$$\frac{v_A}{v_B} = \sqrt{\frac{F_A \mu_B}{F_B \mu_A}}$$</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- SECCIÓN 4: MÓDULO 4 - BIOFÍSICA MÉDICA Y BIOMECÁNICA                       -->
+      <!-- ========================================================================= -->
+      <div id="view-mod4" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-6">
+          <div class="max-w-3xl">
+            <span class="text-xs font-bold text-accent uppercase tracking-wider">Unidad Didáctica 4</span>
+            <h2 class="text-xl font-bold text-slate-900 mt-1">Biofísica Cardiovascular y Acústica Fisiológica</h2>
+            <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+              La relación de rapidez de onda transversal en medios tensos fundamenta dos de los fenómenos fisiomecánicos más relevantes de la práctica médica: la velocidad de la onda de pulso arterial y la modulación vocal laringoscópica.
+            </p>
+          </div>
+
+          <!-- Caso 1: VOP y Rigidez Aórtica -->
+          <div class="bg-slate-50 rounded-2xl border border-slate-200 p-5 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
+              <div>
+                <span class="text-xs font-bold text-rose-600 uppercase tracking-wide">Cardiología y Hemodinámica</span>
+                <h3 class="text-base font-bold text-slate-900">Velocidad de la Onda de Pulso Arterial ($\text{VOP}$) y Rigidez Vascular</h3>
+              </div>
+              <button onclick="triggerSystolicPulse()" class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-semibold transition text-xs shadow-2xs flex items-center gap-1.5">
+                <i class="fa-solid fa-heart-pulse"></i> Iniciar Latido Sistólico
+              </button>
+            </div>
+
+            <div class="bg-white p-3 rounded-xl border border-slate-200 text-center text-sm font-serif text-accent">
+              $$\text{VOP} = \sqrt{\frac{E \cdot h}{2 R \cdot \rho}} \quad \longleftrightarrow \quad v = \sqrt{\frac{\text{Tensión parietal elástica } (F)}{\text{Densidad de masa vascular } (\mu)}}$$
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <!-- Sliders Clínicos (5 cols) -->
+              <div class="lg:col-span-5 space-y-3 text-xs">
+                <div>
+                  <div class="flex justify-between mb-1 text-slate-700">
+                    <span class="font-medium">Rigidez elástica parietal ($E \propto F$):</span>
+                    <span id="label-elastic-e" class="font-mono text-rose-600 font-bold">Joven elástica</span>
+                  </div>
+                  <input type="range" id="slider-pwv-e" min="0.3" max="3.0" step="0.1" value="0.8" class="w-full h-1.5 bg-slate-200 rounded cursor-pointer" oninput="updatePWVModel()">
+                  <div class="flex justify-between text-[10px] text-slate-400 mt-0.5">
+                    <span>Aorta dócil (20 años)</span>
+                    <span>Arteriosclerosis (80 años)</span>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between mb-1 text-slate-700">
+                    <span class="font-medium">Grosor de pared arterial ($h \propto \mu$):</span>
+                    <span id="label-pwv-h" class="font-mono text-amber-700 font-bold">1.2 mm</span>
+                  </div>
+                  <input type="range" id="slider-pwv-h" min="0.8" max="2.8" step="0.1" value="1.2" class="w-full h-1.5 bg-slate-200 rounded cursor-pointer" oninput="updatePWVModel()">
+                </div>
+
+                <!-- Presets Rápidos -->
+                <div class="pt-2 border-t border-slate-200">
+                  <span class="text-[11px] font-bold text-slate-500 block mb-1.5">Presets Clínicos:</span>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button onclick="setPatientPreset('young')" class="p-2 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-medium transition text-left">
+                      🏃 Joven Sano
+                    </button>
+                    <button onclick="setPatientPreset('hypertension')" class="p-2 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-medium transition text-left">
+                      ⚠️ Hipertenso
+                    </button>
+                    <button onclick="setPatientPreset('geriatric')" class="p-2 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-medium transition text-left">
+                      💔 Senil Rígido
+                    </button>
+                    <button onclick="setPatientPreset('athlete')" class="p-2 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-medium transition text-left">
+                      🏅 Atleta
+                    </button>
+                  </div>
+                </div>
+
+                <div class="p-3 rounded-xl border" id="vop-risk-badge">
+                  <div class="flex justify-between items-center">
+                    <span class="font-bold text-slate-800">VOP Carotídeo-Femoral:</span>
+                    <span id="val-vop-calc" class="font-mono text-base font-bold text-accent">6.8 m/s</span>
+                  </div>
+                  <p id="vop-risk-text" class="text-[11px] mt-1 text-slate-600 leading-relaxed"></p>
+                </div>
+              </div>
+
+              <!-- Canvas Vascular (7 cols) -->
+              <div class="lg:col-span-7 space-y-2">
+                <div class="relative w-full h-64 bg-white rounded-xl border border-slate-200 overflow-hidden grid-bg">
+                  <canvas id="canvas-artery" class="w-full h-full block"></canvas>
+                </div>
+                <div class="flex justify-between text-xs text-slate-500 font-mono bg-white p-2.5 rounded-lg border border-slate-200">
+                  <span>Carótida ($t=0\text{ ms}$)</span>
+                  <span>Retardo: $\Delta t = <span id="vop-transit-dt" class="text-rose-600 font-bold">73.5</span>\text{ ms}$</span>
+                  <span>Femoral ($L \approx 0.50\text{ m}$)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Caso 2: Fonación y Cuerdas Vocales -->
+          <div class="bg-slate-50 rounded-2xl border border-slate-200 p-5 space-y-4">
+            <div class="border-b border-slate-200 pb-2">
+              <span class="text-xs font-bold text-accent uppercase tracking-wide">Otorrinolaringología y Fisiología Vocal</span>
+              <h3 class="text-base font-bold text-slate-900">Mecánica Laríngea y Ley de Cuerdas Vibrantes de Mersenne</h3>
+            </div>
+
+            <div class="bg-white p-3 rounded-xl border border-slate-200 text-center text-sm font-serif text-accent">
+              $$f_0 = \frac{v}{2 L} = \frac{1}{2 L} \sqrt{\frac{F}{\mu}}$$
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <!-- Sliders de Control Laríngeo -->
+              <div class="space-y-3 text-xs">
+                <div>
+                  <div class="flex justify-between mb-1 text-slate-700">
+                    <span class="font-medium">Músculo Cricotiroideo (Tensión $F$):</span>
+                    <span id="label-vocal-f" class="font-mono font-bold text-accent">120 N</span>
+                  </div>
+                  <input type="range" id="slider-vocal-f" min="30" max="300" step="5" value="120" class="w-full h-1.5 bg-slate-200 rounded cursor-pointer" oninput="updateVocalAcoustics()">
+                  <span class="text-[10px] text-slate-500">Al tensar $\rightarrow$ aumenta $F$ $\rightarrow$ eleva el tono a frecuencias agudas (voz de cabeza).</span>
+                </div>
+
+                <div>
+                  <div class="flex justify-between mb-1 text-slate-700">
+                    <span class="font-medium">Músculo Tiroaritenoideo (Masa efectiva $\mu$):</span>
+                    <span id="label-vocal-mu" class="font-mono font-bold text-rose-600">0.40 g/cm</span>
+                  </div>
+                  <input type="range" id="slider-vocal-mu" min="0.10" max="0.90" step="0.02" value="0.40" class="w-full h-1.5 bg-slate-200 rounded cursor-pointer" oninput="updateVocalAcoustics()">
+                  <span class="text-[10px] text-slate-500">Al engrosar el repliegue $\rightarrow$ aumenta $\mu$ $\rightarrow$ desciende el tono a frecuencias graves (voz de pecho).</span>
+                </div>
+
+                <div>
+                  <div class="flex justify-between mb-1 text-slate-700">
+                    <span class="font-medium">Longitud del ligamento vocal ($L$):</span>
+                    <span id="label-vocal-l" class="font-mono font-bold text-sky-700">16.0 mm</span>
+                  </div>
+                  <input type="range" id="slider-vocal-l" min="10" max="24" step="0.5" value="16.0" class="w-full h-1.5 bg-slate-200 rounded cursor-pointer" oninput="updateVocalAcoustics()">
+                  <div class="flex justify-between text-[10px] text-slate-400">
+                    <span>Mujeres / Niños (~12-16 mm)</span>
+                    <span>Hombres (~18-24 mm)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Vista Estroboscópica de la Glotis -->
+              <div class="space-y-2">
+                <div class="flex justify-between items-center text-xs">
+                  <span class="font-bold text-slate-700"><i class="fa-solid fa-eye text-accent mr-1"></i> Hendidura Glótica</span>
+                  <span class="font-mono font-bold text-accent bg-accent-light px-2 py-0.5 rounded border border-accent/20">
+                    f₀ = <span id="vocal-f0-display">173.2</span> Hz (<span id="vocal-note-display">F3</span>)
+                  </span>
+                </div>
+                <div class="relative w-full h-44 bg-white rounded-xl border border-slate-200 overflow-hidden grid-bg">
+                  <canvas id="canvas-glottis" class="w-full h-full block"></canvas>
+                </div>
+                <div class="bg-white p-2.5 rounded-lg border border-slate-200 text-xs flex justify-between text-slate-600">
+                  <span>Velocidad tisular: <strong id="vocal-tissue-speed" class="text-accent font-mono">5.54 m/s</strong></span>
+                  <span>Registro: <strong id="vocal-register-type" class="text-slate-800">Tenor / Mezzosoprano</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Pie de Página Institucional -->
+  <footer class="bg-white border-t border-gray-200 py-3 text-center text-xs text-gray-500 font-medium">
+    Desarrollado por vesalio - Todos los derechos reservados
+  </footer>
+
+  <!-- Modal: Vademécum Teórico -->
+  <div id="modal-formulas" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white max-w-3xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="bg-accent p-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-book-bookmark text-xl"></i>
+          <h3 class="font-bold text-base">Vademécum Teórico: Ondas Viajeras y Rapidez en Medios Elásticos</h3>
+        </div>
+        <button onclick="closeFormulasModal()" class="text-white hover:text-gray-200 transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      
+      <div class="p-6 overflow-y-auto space-y-6 text-xs md:text-sm text-gray-700 custom-scrollbar leading-relaxed">
+        
+        <!-- 1. Función de Onda -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-wave-square"></i> 1. Ecuación de Onda Armónica de Dos Variables
+          </h4>
+          <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-2 text-xs">
+            <div class="text-center font-mono text-accent">
+              $$y(x, t) = A \operatorname{sen}(kx - \omega t) \quad \text{o} \quad y(x, t) = A \cos(kx - \omega t)$$
+            </div>
+            <p><strong>Parámetros Espacio-Temporales:</strong> $k = \frac{2\pi}{\lambda}$ (número de onda en $\text{rad/m}$) y $\omega = \frac{2\pi}{T} = 2\pi f$ (frecuencia angular en $\text{rad/s}$).</p>
+            <p><strong>Rapidez de Fase:</strong> $v = \frac{\omega}{k} = \frac{\lambda}{T} = \lambda \cdot f$.</p>
+          </div>
+        </div>
+
+        <!-- 2. Cinemática Transversal de la Partícula -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-arrows-up-down"></i> 2. Derivadas Parciales de Oscilación Local
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <span class="font-bold text-slate-800">Velocidad Transversal ($v_y$):</span>
+              <div class="text-center my-1.5 font-mono text-rose-600">
+                $$v_y(x, t) = \frac{\partial y}{\partial t} = -\omega A \cos(kx - \omega t)$$
+              </div>
+              <p class="text-[11px] text-gray-600">Rapidez máxima: $v_{y,\text{máx}} = \omega A$.</p>
+            </div>
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <span class="font-bold text-slate-800">Aceleración Transversal ($a_y$):</span>
+              <div class="text-center my-1.5 font-mono text-amber-600">
+                $$a_y(x, t) = \frac{\partial^2 y}{\partial t^2} = -\omega^2 y(x, t)$$
+              </div>
+              <p class="text-[11px] text-gray-600">Aceleración máxima: $a_{y,\text{máx}} = \omega^2 A$.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Dinámica en Cuerdas Tensas -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-scale-balanced"></i> 3. Rapidez por Impulso y Masa Inercial
+          </h4>
+          <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-2 text-xs">
+            <div class="text-center font-mono text-accent">
+              $$v = \sqrt{\frac{F}{\mu}} \quad \text{donde } \mu = \frac{m}{L} \quad [\text{kg/m}]$$
+            </div>
+            <p>• La rapidez es directamente proporcional a la raíz cuadrada de la tensión elástica ($F$).</p>
+            <p>• La rapidez es inversamente proporcional a la raíz cuadrada de la densidad lineal inercial ($\mu$).</p>
+          </div>
+        </div>
+
+        <!-- 4. Aplicaciones Biomédicas -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-heart-pulse"></i> 4. Correlaciones Clínicas
+          </h4>
+          <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-2 text-xs">
+            <p><strong>Onda de Pulso Arterial (Moens-Korteweg):</strong> $\text{VOP} \approx \sqrt{\frac{E \cdot h}{2R \cdot \rho}}$. La rigidez aórtica ($E \leftrightarrow F$) aumenta la velocidad del pulso, marcador de daño cardiovascular.</p>
+            <p><strong>Bioacústica Laríngea (Mersenne):</strong> $f_0 = \frac{1}{2L}\sqrt{\frac{F}{\mu}}$. El músculo cricotiroideo regula la tensión $F$ y el tiroaritenoideo modula la masa $\mu$ de las cuerdas vocales.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bg-gray-50 p-4 border-t border-gray-200 flex justify-end">
+        <button onclick="closeFormulasModal()" class="px-5 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover text-xs transition shadow-sm">
+          Entendido
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Guía de Uso -->
+  <div id="modal-tutorial" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white max-w-4xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="bg-accent p-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-circle-question text-xl"></i>
+          <h3 class="font-bold text-base">Guía de Uso: Onda Viajera y Dinámica en Medios Tensos</h3>
+        </div>
+        <button onclick="closeTutorial()" class="text-white hover:text-gray-200 transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      
+      <div class="p-6 overflow-y-auto space-y-6 text-xs md:text-sm text-gray-700 custom-scrollbar leading-relaxed">
+        
+        <!-- 1. Navegación -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-1 flex items-center gap-2">
+            <i class="fa-solid fa-compass"></i> 1. Navegación Modular Lateral
+          </h4>
+          <p class="text-gray-600">
+            Utiliza la barra lateral izquierda persistente para alternar en cualquier momento entre los 4 módulos temáticos del simulador: Cinemática de la función de onda, Deducción dinámica por teorema del impulso, Banco experimental comparativo de cuerdas y Aplicaciones biofísicas en medicina.
+          </p>
+        </div>
+
+        <!-- 2. Controles de Reproducción y Atajos -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-play"></i> 2. Controles de Reproducción y Teclado
+          </h4>
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <strong class="text-slate-800 block mb-1"><i class="fa-solid fa-pause text-accent mr-1"></i> Pausar / Reanudar:</strong>
+              <p class="text-gray-600 text-[11px]">Usa el botón superior o presiona la tecla <kbd class="px-1.5 py-0.5 bg-white border border-gray-300 rounded font-mono font-bold text-slate-800 text-[10px]">Espacio</kbd>.</p>
+            </div>
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <strong class="text-slate-800 block mb-1"><i class="fa-solid fa-forward-step text-accent mr-1"></i> Paso a Paso:</strong>
+              <p class="text-gray-600 text-[11px]">Avanza en intervalos de $\Delta t = 0.02\text{ s}$ para estudiar vectores en instantes clave.</p>
+            </div>
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <strong class="text-slate-800 block mb-1"><i class="fa-solid fa-rotate-left text-accent mr-1"></i> Reiniciar ($t = 0$):</strong>
+              <p class="text-gray-600 text-[11px]">Restaura el cronómetro y los frentes al origen del medio.</p>
+            </div>
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <strong class="text-slate-800 block mb-1"><i class="fa-solid fa-gauge text-accent mr-1"></i> Velocidad Motor:</strong>
+              <p class="text-gray-600 text-[11px]">Selector de escala temporal desde cámara lenta ($0.25\times$) hasta $1.5\times$.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Módulos Temáticos -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-sliders"></i> 3. Módulos Temáticos y Características Didácticas
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5">
+              <div class="flex items-center gap-1.5 font-bold text-slate-800">
+                <i class="fa-solid fa-chart-line text-accent"></i> 1. Cinemática Multivariable $y(x,t)$
+              </div>
+              <p class="text-gray-600 text-[11px]">
+                • <strong>3 Proyecciones visuales:</strong> Onda continua dinámica, instantánea espacial congelada a $t=t_0$ (muestra $\lambda$), e historia temporal de un punto en $x=x_0$ (muestra el período $T$).<br>
+                • <strong>Sonda interactiva $x_0$:</strong> Haz clic o arrastra sobre el lienzo para ubicar la partícula de prueba y medir elongación $y(x_0)$, velocidad transversal $v_y = \partial y/\partial t$ y aceleración $a_y = \partial^2 y/\partial t^2$.<br>
+                • <strong>Conmutador $\operatorname{sen} / \cos$:</strong> Cambia la fase inicial de la función armónica.<br>
+                • <strong>Sliders en tiempo real:</strong> Modifica tensión $F$, densidad $\mu$, amplitud $A$ y frecuencia $f$, con recálculo dinámico de $v = \sqrt{F/\mu}$, $\lambda$, $k$ y $\omega$.
+              </p>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5">
+              <div class="flex items-center gap-1.5 font-bold text-slate-800">
+                <i class="fa-solid fa-scale-balanced text-accent"></i> 2. Deducción por Impulso y Momento
+              </div>
+              <p class="text-gray-600 text-[11px]">
+                • <strong>Simulación dinámica:</strong> Pulsa "Enviar Impulso Transversal" para disparar un pulso escalón y observar el avance de la perturbación a velocidad $v$.<br>
+                • <strong>Diagrama de cuerpo libre:</strong> Muestra los triángulos de fuerzas ($\tan\theta = F_y/F$) y cinemático ($\tan\theta = v_y/v$).<br>
+                • <strong>Demostración analítica en 4 pasos:</strong> Deduce la masa perturbada $m = \mu v t$, el impulso $I_y = m v_y$ y la cancelación algebraica que resulta en $v = \sqrt{F/\mu}$.
+              </p>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5">
+              <div class="flex items-center gap-1.5 font-bold text-slate-800">
+                <i class="fa-solid fa-arrows-split-up-and-left text-accent"></i> 3. Banco de Medios ($F$ y $\mu$)
+              </div>
+              <p class="text-gray-600 text-[11px]">
+                • <strong>Pista de carreras de 20 metros:</strong> Compara en simultáneo una Cuerda A liviana (hilo) frente a una Cuerda B pesada (soga densa).<br>
+                • <strong>Lanzamiento sincronizado:</strong> Botón "¡Disparar Pulsos Simultáneos!" con cronometrado individual de tiempos de llegada a la meta.<br>
+                • <strong>Verificación del cociente:</strong> Demuestra visual y numéricamente la ley $v_A / v_B = \sqrt{(F_A/F_B) \cdot (\mu_B/\mu_A)}$.
+              </p>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5">
+              <div class="flex items-center gap-1.5 font-bold text-slate-800">
+                <i class="fa-solid fa-heart-pulse text-accent"></i> 4. Biofísica Médica y Biomecánica
+              </div>
+              <p class="text-gray-600 text-[11px]">
+                • <strong>Velocidad de la Onda de Pulso Arterial ($\text{VOP}$):</strong> Simula el latido sistólico en la aorta. Modela la ecuación de Moens-Korteweg con presets para joven sano, hipertenso, anciano arteriosclerótico y atleta.<br>
+                • <strong>Telemetría carotídeo-femoral:</strong> Cálculo en milisegundos del retardo de tránsito ($\Delta t$) y clasificación del riesgo cardiovascular.<br>
+                • <strong>Fisiología vocal (Mersenne):</strong> Control laríngeo del músculo cricotiroideo (tensión $F$) y tiroaritenoideo (masa $\mu$). Incluye visualizador estroboscópico de la glotis y nota fundamental $f_0$.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bg-gray-50 p-4 border-t border-gray-200 flex justify-end">
+        <button onclick="closeTutorial()" class="px-5 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover text-xs transition shadow-sm">
+          Comenzar Experiencia
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lógica y Simulación en JavaScript -->
+  <script>
+    /* =========================================================================
+       1. ESTADO GLOBAL DE LA SIMULACIÓN
+       ========================================================================= */
+    const state = {
+      time: 0,
+      isPlaying: true,
+      timeScale: 1.0,
+      activeTab: 'mod1',
+
+      // Parámetros de la cuerda y onda (Módulo 1)
+      A: 1.20,             // Amplitud [m]
+      Tension: 100,        // Tensión elástica [N]
+      mu: 1.00,            // Densidad lineal [kg/m]
+      freq: 1.50,          // Frecuencia [Hz]
+      waveFunction: 'sin', // 'sin' | 'cos'
+      x0: 3.0,             // Posición de la sonda [m]
+      showVy: true,
+      showAy: true,
+      showParticles: true,
+      viewMode: 'continuous', // 'continuous' | 'snapshot' | 'history'
+      snapshotTime: 0,
+      historyBuffer: [],
+
+      // Variables derivadas
+      v: 10.0,
+      lambda: 6.67,
+      period: 0.67,
+      k: 0.94,
+      omega: 9.42,
+
+      // Módulo 2: Impulso
+      impulseProgress: 0,
+      isImpulsing: false,
+
+      // Módulo 3: Doble Cuerda
+      stringA: { Tension: 100, mu: 0.25, v: 20.0, pulseX: 0, arrived: false, transitTime: 1.0 },
+      stringB: { Tension: 100, mu: 2.50, v: 6.32, pulseX: 0, arrived: false, transitTime: 3.16 },
+      raceActive: false,
+      raceTime: 0,
+
+      // Módulo 4: Biofísica Médica
+      pwv: {
+        E: 0.8,
+        h: 1.2,
+        vop: 6.8,
+        pulsePos: 0,
+        isPulsing: false,
+        transitDt: 73.5
+      },
+      vocal: {
+        F: 120,
+        mu: 0.40,
+        L: 16.0,
+        f0: 173.2,
+        vTissue: 5.54
+      }
+    };
+
+    /* Contextos de Canvas */
+    const canvasWave = document.getElementById('canvas-wave');
+    const ctxWave = canvasWave.getContext('2d');
+
+    const canvasImpulse = document.getElementById('canvas-impulse');
+    const ctxImpulse = canvasImpulse.getContext('2d');
+
+    const canvasDual = document.getElementById('canvas-dual');
+    const ctxDual = canvasDual.getContext('2d');
+
+    const canvasArtery = document.getElementById('canvas-artery');
+    const ctxArtery = canvasArtery.getContext('2d');
+
+    const canvasGlottis = document.getElementById('canvas-glottis');
+    const ctxGlottis = canvasGlottis.getContext('2d');
+
+    /* =========================================================================
+       2. GESTIÓN DE PESTAÑAS (TABS) Y MODALES
+       ========================================================================= */
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-accent', 'text-white', 'shadow-sm');
+        btn.classList.add('text-gray-700', 'hover:bg-gray-100');
+      });
+
+      const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-accent', 'text-white', 'shadow-sm');
+        activeBtn.classList.remove('text-gray-700', 'hover:bg-gray-100');
+      }
+
+      ['mod1', 'mod2', 'mod3', 'mod4'].forEach(id => {
+        const view = document.getElementById(`view-${id}`);
+        if (view) {
+          view.classList.toggle('hidden', id !== tabId);
+        }
+      });
+
+      renderMathWhenReady();
+      setTimeout(resizeAllCanvases, 50);
+    }
+
+    function openFormulasModal() {
+      document.getElementById('modal-formulas').classList.remove('hidden');
+      renderMathWhenReady();
+    }
+
+    function closeFormulasModal() {
+      document.getElementById('modal-formulas').classList.add('hidden');
+    }
+
+    function openTutorial() {
+      document.getElementById('modal-tutorial').classList.remove('hidden');
+      renderMathWhenReady();
+    }
+
+    function closeTutorial() {
+      document.getElementById('modal-tutorial').classList.add('hidden');
+    }
+
+    /* =========================================================================
+       3. RESIZE HI-DPI
+       ========================================================================= */
+    function resizeCanvas(cv) {
+      if (!cv) return;
+      const rect = cv.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      if (rect.width > 0 && rect.height > 0) {
+        cv.width = rect.width * dpr;
+        cv.height = rect.height * dpr;
+      }
+    }
+
+    function resizeAllCanvases() {
+      resizeCanvas(canvasWave);
+      resizeCanvas(canvasImpulse);
+      resizeCanvas(canvasDual);
+      resizeCanvas(canvasArtery);
+      resizeCanvas(canvasGlottis);
+    }
+
+    window.addEventListener('resize', resizeAllCanvases);
+
+    /* =========================================================================
+       4. CÁLCULOS FÍSICOS DERIVADOS
+       ========================================================================= */
+    function updateDerivedPhysics() {
+      state.v = Math.sqrt(state.Tension / state.mu);
+      state.lambda = state.v / state.freq;
+      state.period = 1 / state.freq;
+      state.k = (2 * Math.PI) / state.lambda;
+      state.omega = 2 * Math.PI * state.freq;
+
+      document.getElementById('math-speed-stat').innerHTML = `$v = ${state.v.toFixed(1)}\\text{ m/s}$`;
+      document.getElementById('math-lambda-stat').innerHTML = `$\\lambda = ${state.lambda.toFixed(2)}\\text{ m}$`;
+      document.getElementById('hud-quick-stats').textContent = `v = ${state.v.toFixed(1)} m/s | λ = ${state.lambda.toFixed(2)} m | f = ${state.freq.toFixed(2)} Hz`;
+
+      const fnName = state.waveFunction === 'sin' ? '\\operatorname{sen}' : '\\cos';
+      document.getElementById('math-wave-eq').innerHTML = `$$y(x,t) = ${state.A.toFixed(2)} ${fnName}(${state.k.toFixed(2)} x - ${state.omega.toFixed(2)} t)$$`;
+
+      renderMathWhenReady();
+    }
+
+    function evaluateWave(x, t) {
+      const phase = state.k * x - state.omega * t;
+      return state.waveFunction === 'sin' ? state.A * Math.sin(phase) : state.A * Math.cos(phase);
+    }
+
+    function evaluateVy(x, t) {
+      const phase = state.k * x - state.omega * t;
+      return state.waveFunction === 'sin' 
+        ? -state.omega * state.A * Math.cos(phase)
+        : state.omega * state.A * Math.sin(phase);
+    }
+
+    function evaluateAy(x, t) {
+      return -state.omega * state.omega * evaluateWave(x, t);
+    }
+
+    /* =========================================================================
+       5. CONTROLES DE REPRODUCCIÓN
+       ========================================================================= */
+    function togglePlay() {
+      state.isPlaying = !state.isPlaying;
+      const lbl = document.getElementById('label-play');
+      const icon = document.getElementById('icon-play');
+      if (state.isPlaying) {
+        lbl.textContent = 'Pausar (Space)';
+        icon.innerHTML = '<path d="M4 4l12 6-12 6z"/>';
+      } else {
+        lbl.textContent = 'Reanudar';
+        icon.innerHTML = '<path d="M4 4h4v12H4zm8 0h4v12h-4z"/>';
+      }
+    }
+
+    function stepForward() {
+      state.isPlaying = false;
+      const lbl = document.getElementById('label-play');
+      const icon = document.getElementById('icon-play');
+      lbl.textContent = 'Reanudar';
+      icon.innerHTML = '<path d="M4 4h4v12H4zm8 0h4v12h-4z"/>';
+      state.time += 0.02;
+    }
+
+    function resetSimulation() {
+      state.time = 0;
+      state.historyBuffer = [];
+      state.impulseProgress = 0;
+      state.isImpulsing = false;
+      state.raceActive = false;
+      state.stringA.pulseX = 0;
+      state.stringB.pulseX = 0;
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && e.target === document.body) {
+        e.preventDefault();
+        togglePlay();
+      }
+    });
+
+    function setTimeScale(val) {
+      state.timeScale = parseFloat(val);
+    }
+
+    function setWaveFunction(fn) {
+      state.waveFunction = fn;
+      const bSin = document.getElementById('btn-fn-sin');
+      const bCos = document.getElementById('btn-fn-cos');
+      const hTitle = document.getElementById('hud-mode-title');
+
+      if (fn === 'sin') {
+        bSin.className = 'px-2.5 py-1 rounded-lg bg-accent text-white font-medium text-xs shadow-2xs transition';
+        bCos.className = 'px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium text-xs transition';
+        hTitle.textContent = 'Onda Progresiva y(x, t) = A sen(kx - ωt)';
+      } else {
+        bCos.className = 'px-2.5 py-1 rounded-lg bg-accent text-white font-medium text-xs shadow-2xs transition';
+        bSin.className = 'px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium text-xs transition';
+        hTitle.textContent = 'Onda Progresiva y(x, t) = A cos(kx - ωt)';
+      }
+      updateDerivedPhysics();
+    }
+
+    function setViewMode(mode) {
+      state.viewMode = mode;
+      const bCont = document.getElementById('view-btn-continuous');
+      const bSnap = document.getElementById('view-btn-snapshot');
+      const bHist = document.getElementById('view-btn-history');
+
+      [bCont, bSnap, bHist].forEach(b => {
+        b.className = 'preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition';
+      });
+
+      if (mode === 'continuous') {
+        bCont.className = 'preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-accent-light text-accent border border-accent/20 transition';
+      } else if (mode === 'snapshot') {
+        bSnap.className = 'preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-100 text-sky-800 border border-sky-200 transition';
+        state.snapshotTime = state.time;
+      } else {
+        bHist.className = 'preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200 transition';
+      }
+    }
+
+    /* Eventos de Sliders */
+    document.getElementById('slider-tension').addEventListener('input', (e) => {
+      state.Tension = parseFloat(e.target.value);
+      document.getElementById('label-tension').textContent = `${state.Tension.toFixed(0)} N`;
+      updateDerivedPhysics();
+    });
+
+    document.getElementById('slider-mu').addEventListener('input', (e) => {
+      state.mu = parseFloat(e.target.value);
+      document.getElementById('label-mu').textContent = `${state.mu.toFixed(2)} kg/m`;
+      updateDerivedPhysics();
+    });
+
+    document.getElementById('slider-amp').addEventListener('input', (e) => {
+      state.A = parseFloat(e.target.value);
+      document.getElementById('label-amp').textContent = `${state.A.toFixed(2)} m`;
+      updateDerivedPhysics();
+    });
+
+    document.getElementById('slider-freq').addEventListener('input', (e) => {
+      state.freq = parseFloat(e.target.value);
+      document.getElementById('label-freq').textContent = `${state.freq.toFixed(2)} Hz`;
+      updateDerivedPhysics();
+    });
+
+    document.getElementById('slider-x0').addEventListener('input', (e) => {
+      state.x0 = parseFloat(e.target.value);
+      document.getElementById('label-x0').textContent = `${state.x0.toFixed(2)} m`;
+      state.historyBuffer = [];
+    });
+
+    document.getElementById('check-vy').addEventListener('change', (e) => { state.showVy = e.target.checked; });
+    document.getElementById('check-ay').addEventListener('change', (e) => { state.showAy = e.target.checked; });
+    document.getElementById('check-particles').addEventListener('change', (e) => { state.showParticles = e.target.checked; });
+
+    /* Interacción con el Canvas para ubicar la sonda x0 */
+    function handleCanvasProbe(evt) {
+      const rect = canvasWave.getBoundingClientRect();
+      const clickX = evt.clientX - rect.left;
+      const originX = 50;
+      const maxX = 16.0;
+      const scaleX = (rect.width - originX - 30) / maxX;
+
+      let newX0 = (clickX - originX) / scaleX;
+      newX0 = Math.max(0.5, Math.min(maxX, newX0));
+      state.x0 = newX0;
+      document.getElementById('slider-x0').value = newX0.toFixed(1);
+      document.getElementById('label-x0').textContent = `${newX0.toFixed(2)} m`;
+      state.historyBuffer = [];
+    }
+
+    let isDraggingProbe = false;
+    canvasWave.addEventListener('mousedown', (e) => { isDraggingProbe = true; handleCanvasProbe(e); });
+    window.addEventListener('mouseup', () => { isDraggingProbe = false; });
+    canvasWave.addEventListener('mousemove', (e) => { if (isDraggingProbe) handleCanvasProbe(e); });
+
+    /* Helper: Dibujo de Flechas Vectoriales */
+    function drawArrow(ctx, fromx, fromy, tox, toy, color, lineWidth, label) {
+      const dpr = window.devicePixelRatio || 1;
+      const headlen = 8 * dpr;
+      const dx = tox - fromx;
+      const dy = toy - fromy;
+      const angle = Math.atan2(dy, dx);
+
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = lineWidth;
+
+      ctx.beginPath();
+      ctx.moveTo(fromx, fromy);
+      ctx.lineTo(tox, toy);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(tox, toy);
+      ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fill();
+
+      if (label) {
+        ctx.font = `bold ${10 * dpr}px Outfit, sans-serif`;
+        ctx.fillText(label, tox + 5 * dpr, toy + (dy < 0 ? -4 * dpr : 12 * dpr));
+      }
+      ctx.restore();
+    }
+
+    function drawGrid(ctx, w, h) {
+      const dpr = window.devicePixelRatio || 1;
+      ctx.beginPath();
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.lineWidth = 1 * dpr;
+      const step = 25 * dpr;
+      for (let x = 0; x < w; x += step) {
+        ctx.moveTo(x, 0); ctx.lineTo(x, h);
+      }
+      for (let y = 0; y < h; y += step) {
+        ctx.moveTo(0, y); ctx.lineTo(w, y);
+      }
+      ctx.stroke();
+    }
+
+    /* =========================================================================
+       6. RENDERIZADO: MÓDULO 1 (CANVAS DE ONDA CONTINUA, FOTO E HISTORIA)
+       ========================================================================= */
+    function renderModule1() {
+      const w = canvasWave.width;
+      const h = canvasWave.height;
+      const dpr = window.devicePixelRatio || 1;
+
+      ctxWave.clearRect(0, 0, w, h);
+      drawGrid(ctxWave, w, h);
+
+      const renderTime = (state.viewMode === 'snapshot') ? state.snapshotTime : state.time;
+      const originX = 50 * dpr;
+      const originY = h / 2;
+      const maxX = 16.0;
+      const scaleX = (w - originX - 30 * dpr) / maxX;
+      const scaleY = (h * 0.35) / 2.0;
+
+      // Ejes coordenados
+      ctxWave.strokeStyle = '#94a3b8';
+      ctxWave.lineWidth = 1.5 * dpr;
+      ctxWave.beginPath();
+      ctxWave.moveTo(originX, 15 * dpr);
+      ctxWave.lineTo(originX, h - 15 * dpr);
+      ctxWave.moveTo(originX - 10 * dpr, originY);
+      ctxWave.lineTo(w - 20 * dpr, originY);
+      ctxWave.stroke();
+
+      ctxWave.fillStyle = '#64748b';
+      ctxWave.font = `${10 * dpr}px Outfit, sans-serif`;
+      ctxWave.fillText('y [m]', originX + 8 * dpr, 25 * dpr);
+      ctxWave.fillText('x [m]', w - 40 * dpr, originY - 8 * dpr);
+
+      // MODO HISTORIA TEMPORAL
+      if (state.viewMode === 'history') {
+        const histLen = state.historyBuffer.length;
+        if (histLen > 1) {
+          ctxWave.beginPath();
+          ctxWave.strokeStyle = '#15803d';
+          ctxWave.lineWidth = 3 * dpr;
+
+          const timeSpan = 8.0;
+          const scaleT = (w - originX - 40 * dpr) / timeSpan;
+
+          for (let i = 0; i < histLen; i++) {
+            const pt = state.historyBuffer[i];
+            const dt = state.time - pt.t;
+            if (dt <= timeSpan) {
+              const px = originX + dt * scaleT;
+              const py = originY - pt.y * scaleY;
+              if (i === 0) ctxWave.moveTo(px, py);
+              else ctxWave.lineTo(px, py);
+            }
+          }
+          ctxWave.stroke();
+
+          // Marcador de Período T
+          const periodPixels = state.period * scaleT;
+          if (periodPixels < (w - originX - 60 * dpr)) {
+            const pX1 = originX + 30 * dpr;
+            const pX2 = pX1 + periodPixels;
+            const pY = originY - (state.A * 1.25) * scaleY;
+
+            ctxWave.strokeStyle = '#15803d';
+            ctxWave.lineWidth = 1.5 * dpr;
+            ctxWave.beginPath();
+            ctxWave.moveTo(pX1, pY); ctxWave.lineTo(pX2, pY);
+            ctxWave.moveTo(pX1, pY - 5 * dpr); ctxWave.lineTo(pX1, pY + 5 * dpr);
+            ctxWave.moveTo(pX2, pY - 5 * dpr); ctxWave.lineTo(pX2, pY + 5 * dpr);
+            ctxWave.stroke();
+
+            ctxWave.fillStyle = '#15803d';
+            ctxWave.font = `bold ${11 * dpr}px Outfit, sans-serif`;
+            ctxWave.fillText(`Período T = ${state.period.toFixed(2)} s`, (pX1 + pX2) / 2 - 45 * dpr, pY - 8 * dpr);
+          }
+        }
+        return;
+      }
+
+      // MODO CONTINUO / INSTANTÁNEA EN X
+      ctxWave.beginPath();
+      ctxWave.strokeStyle = '#0284c7';
+      ctxWave.lineWidth = 3.5 * dpr;
+
+      const numSamples = 300;
+      for (let i = 0; i <= numSamples; i++) {
+        const xPhys = (i / numSamples) * maxX;
+        const yPhys = evaluateWave(xPhys, renderTime);
+        const px = originX + xPhys * scaleX;
+        const py = originY - yPhys * scaleY;
+
+        if (i === 0) ctxWave.moveTo(px, py);
+        else ctxWave.lineTo(px, py);
+      }
+      ctxWave.stroke();
+
+      // Indicador de Longitud de Onda
+      if (state.lambda <= maxX) {
+        const xPeak1 = (state.lambda * 0.25) + ((state.v * renderTime) % state.lambda);
+        const xPeak2 = xPeak1 + state.lambda;
+
+        if (xPeak2 <= maxX) {
+          const px1 = originX + xPeak1 * scaleX;
+          const px2 = originX + xPeak2 * scaleX;
+          const pyLambda = originY - (state.A * 1.35) * scaleY;
+
+          ctxWave.strokeStyle = '#436600';
+          ctxWave.lineWidth = 1.5 * dpr;
+          ctxWave.beginPath();
+          ctxWave.moveTo(px1, pyLambda); ctxWave.lineTo(px2, pyLambda);
+          ctxWave.moveTo(px1, pyLambda - 5 * dpr); ctxWave.lineTo(px1, pyLambda + 5 * dpr);
+          ctxWave.moveTo(px2, pyLambda - 5 * dpr); ctxWave.lineTo(px2, pyLambda + 5 * dpr);
+          ctxWave.stroke();
+
+          ctxWave.fillStyle = '#436600';
+          ctxWave.font = `bold ${11 * dpr}px Outfit, sans-serif`;
+          ctxWave.fillText(`Longitud de onda λ = ${state.lambda.toFixed(2)} m`, (px1 + px2) / 2 - 65 * dpr, pyLambda - 8 * dpr);
+        }
+      }
+
+      // Discretización de Partículas
+      if (state.showParticles) {
+        const numBeads = 40;
+        for (let i = 0; i <= numBeads; i++) {
+          const xBead = (i / numBeads) * maxX;
+          const yBead = evaluateWave(xBead, renderTime);
+          const px = originX + xBead * scaleX;
+          const py = originY - yBead * scaleY;
+
+          ctxWave.beginPath();
+          ctxWave.arc(px, py, 3.5 * dpr, 0, Math.PI * 2);
+          ctxWave.fillStyle = '#0284c7';
+          ctxWave.fill();
+        }
+      }
+
+      // Partícula de Prueba en x0
+      const y0 = evaluateWave(state.x0, renderTime);
+      const vy0 = evaluateVy(state.x0, renderTime);
+      const ay0 = evaluateAy(state.x0, renderTime);
+
+      const px0 = originX + state.x0 * scaleX;
+      const py0 = originY - y0 * scaleY;
+
+      document.getElementById('live-particle-vy').textContent = `${vy0 >= 0 ? '+' : ''}${vy0.toFixed(2)} m/s`;
+      document.getElementById('live-particle-ay').textContent = `${ay0 >= 0 ? '+' : ''}${ay0.toFixed(2)} m/s²`;
+      document.getElementById('probe-coords').textContent = `x = ${state.x0.toFixed(2)} m, y = ${y0.toFixed(2)} m`;
+
+      // Guía vertical de x0
+      ctxWave.strokeStyle = 'rgba(225, 29, 72, 0.3)';
+      ctxWave.lineWidth = 1.5 * dpr;
+      ctxWave.setLineDash([3 * dpr, 3 * dpr]);
+      ctxWave.beginPath();
+      ctxWave.moveTo(px0, originY - 2.0 * scaleY);
+      ctxWave.lineTo(px0, originY + 2.0 * scaleY);
+      ctxWave.stroke();
+      ctxWave.setLineDash([]);
+
+      // Vectores en x0
+      if (state.showVy) {
+        const vyPixelLen = (vy0 / (state.omega * state.A || 1)) * 50 * dpr;
+        drawArrow(ctxWave, px0, py0, px0, py0 - vyPixelLen, '#e11d48', 2.5 * dpr, `vy = ${vy0.toFixed(1)} m/s`);
+      }
+
+      if (state.showAy) {
+        const ayPixelLen = (ay0 / (state.omega * state.omega * state.A || 1)) * 50 * dpr;
+        drawArrow(ctxWave, px0 + 10 * dpr, py0, px0 + 10 * dpr, py0 - ayPixelLen, '#d97706', 2.5 * dpr, `ay = ${ay0.toFixed(1)} m/s²`);
+      }
+
+      // Vector horizontal de propagación v
+      const crestY = originY - state.A * scaleY;
+      drawArrow(ctxWave, originX + 20 * dpr, crestY - 15 * dpr, originX + 90 * dpr, crestY - 15 * dpr, '#436600', 2 * dpr, `v_onda = ${state.v.toFixed(1)} m/s`);
+
+      // Partícula roja en x0
+      ctxWave.beginPath();
+      ctxWave.arc(px0, py0, 7 * dpr, 0, Math.PI * 2);
+      ctxWave.fillStyle = '#e11d48';
+      ctxWave.fill();
+      ctxWave.lineWidth = 2 * dpr;
+      ctxWave.strokeStyle = '#ffffff';
+      ctxWave.stroke();
+    }
+
+    /* =========================================================================
+       7. RENDERIZADO: MÓDULO 2 (DEDUCCIÓN DINÁMICA POR IMPULSO)
+       ========================================================================= */
+    function renderModule2() {
+      const w = canvasImpulse.width;
+      const h = canvasImpulse.height;
+      const dpr = window.devicePixelRatio || 1;
+
+      ctxImpulse.clearRect(0, 0, w, h);
+      drawGrid(ctxImpulse, w, h);
+
+      const originX = 60 * dpr;
+      const baseY = h * 0.68;
+      const defY = h * 0.32;
+      const maxL = w - 100 * dpr;
+
+      const frontX = originX + (state.impulseProgress * maxL);
+
+      // Cuerda en reposo adelante
+      ctxImpulse.beginPath();
+      ctxImpulse.strokeStyle = '#94a3b8';
+      ctxImpulse.lineWidth = 3 * dpr;
+      ctxImpulse.moveTo(frontX, baseY);
+      ctxImpulse.lineTo(w - 30 * dpr, baseY);
+      ctxImpulse.stroke();
+
+      // Cuerda deformada inclinada
+      ctxImpulse.beginPath();
+      ctxImpulse.strokeStyle = '#0284c7';
+      ctxImpulse.lineWidth = 4 * dpr;
+      ctxImpulse.moveTo(originX, defY);
+      ctxImpulse.lineTo(frontX, baseY);
+      ctxImpulse.stroke();
+
+      // Punto de aplicación Fy
+      ctxImpulse.beginPath();
+      ctxImpulse.arc(originX, defY, 6 * dpr, 0, Math.PI * 2);
+      ctxImpulse.fillStyle = '#e11d48';
+      ctxImpulse.fill();
+
+      drawArrow(ctxImpulse, originX, defY, originX, defY - 50 * dpr, '#e11d48', 2.5 * dpr, 'F_y');
+      drawArrow(ctxImpulse, originX, defY, originX + 70 * dpr, defY, '#436600', 2.5 * dpr, 'F (Tensión)');
+
+      if (frontX > originX + 20 * dpr) {
+        const midX = (originX + frontX) / 2;
+        const midY = (defY + baseY) / 2;
+        drawArrow(ctxImpulse, midX, midY, midX, midY - 40 * dpr, '#e11d48', 2 * dpr, 'v_y');
+      }
+
+      drawArrow(ctxImpulse, frontX, baseY - 15 * dpr, frontX + 60 * dpr, baseY - 15 * dpr, '#0284c7', 2.5 * dpr, 'v (Frente)');
+
+      // Cotas de longitud y masa
+      ctxImpulse.strokeStyle = '#64748b';
+      ctxImpulse.lineWidth = 1 * dpr;
+      ctxImpulse.setLineDash([3 * dpr, 3 * dpr]);
+      ctxImpulse.beginPath();
+      ctxImpulse.moveTo(originX, baseY + 25 * dpr);
+      ctxImpulse.lineTo(frontX, baseY + 25 * dpr);
+      ctxImpulse.stroke();
+      ctxImpulse.setLineDash([]);
+
+      ctxImpulse.fillStyle = '#0284c7';
+      ctxImpulse.font = `bold ${11 * dpr}px Outfit, sans-serif`;
+      ctxImpulse.fillText(`Longitud deformada Δx = v · t`, (originX + frontX) / 2 - 60 * dpr, baseY + 42 * dpr);
+      ctxImpulse.fillText(`Masa en movimiento m = μ · v · t`, (originX + frontX) / 2 - 65 * dpr, baseY + 58 * dpr);
+
+      if (state.isImpulsing) {
+        state.impulseProgress += 0.008;
+        if (state.impulseProgress >= 0.85) {
+          state.impulseProgress = 0.85;
+          state.isImpulsing = false;
+        }
+      }
+    }
+
+    function triggerImpulsePulse() {
+      state.impulseProgress = 0.05;
+      state.isImpulsing = true;
+    }
+
+    /* =========================================================================
+       8. RENDERIZADO: MÓDULO 3 (BANCO EXPERIMENTAL DUAL)
+       ========================================================================= */
+    function updateDualExperiment() {
+      state.stringA.Tension = parseFloat(document.getElementById('slider-f-a').value);
+      state.stringA.mu = parseFloat(document.getElementById('slider-mu-a').value);
+      state.stringA.v = Math.sqrt(state.stringA.Tension / state.stringA.mu);
+      state.stringA.transitTime = 20.0 / state.stringA.v;
+
+      state.stringB.Tension = parseFloat(document.getElementById('slider-f-b').value);
+      state.stringB.mu = parseFloat(document.getElementById('slider-mu-b').value);
+      state.stringB.v = Math.sqrt(state.stringB.Tension / state.stringB.mu);
+      state.stringB.transitTime = 20.0 / state.stringB.v;
+
+      document.getElementById('label-f-a').textContent = `${state.stringA.Tension.toFixed(0)} N`;
+      document.getElementById('label-mu-a').textContent = `${state.stringA.mu.toFixed(2)} kg/m`;
+      document.getElementById('speed-a-badge').textContent = `v_A = ${state.stringA.v.toFixed(2)} m/s`;
+      document.getElementById('time-transit-a').textContent = `${state.stringA.transitTime.toFixed(2)} s`;
+
+      document.getElementById('label-f-b').textContent = `${state.stringB.Tension.toFixed(0)} N`;
+      document.getElementById('label-mu-b').textContent = `${state.stringB.mu.toFixed(2)} kg/m`;
+      document.getElementById('speed-b-badge').textContent = `v_B = ${state.stringB.v.toFixed(2)} m/s`;
+      document.getElementById('time-transit-b').textContent = `${state.stringB.transitTime.toFixed(2)} s`;
+
+      const ratio = state.stringA.v / state.stringB.v;
+      document.getElementById('ratio-speed').textContent = `${ratio.toFixed(2)}x`;
+    }
+
+    function launchPulseRace() {
+      state.stringA.pulseX = 0;
+      state.stringA.arrived = false;
+      state.stringB.pulseX = 0;
+      state.stringB.arrived = false;
+      state.raceActive = true;
+      state.raceTime = 0;
+    }
+
+    function renderModule3() {
+      const w = canvasDual.width;
+      const h = canvasDual.height;
+      const dpr = window.devicePixelRatio || 1;
+
+      ctxDual.clearRect(0, 0, w, h);
+      drawGrid(ctxDual, w, h);
+
+      const startX = 60 * dpr;
+      const trackLength = w - 120 * dpr;
+      const finishX = startX + trackLength;
+
+      const trackAy = h * 0.32;
+      const trackBy = h * 0.72;
+
+      // Pistas
+      ctxDual.strokeStyle = '#cbd5e1';
+      ctxDual.lineWidth = 1.5 * dpr;
+      ctxDual.beginPath();
+      ctxDual.moveTo(startX, trackAy); ctxDual.lineTo(finishX, trackAy);
+      ctxDual.moveTo(startX, trackBy); ctxDual.lineTo(finishX, trackBy);
+      ctxDual.stroke();
+
+      // Meta
+      ctxDual.strokeStyle = '#d97706';
+      ctxDual.lineWidth = 2.5 * dpr;
+      ctxDual.setLineDash([4 * dpr, 4 * dpr]);
+      ctxDual.beginPath();
+      ctxDual.moveTo(finishX, 15 * dpr); ctxDual.lineTo(finishX, h - 15 * dpr);
+      ctxDual.stroke();
+      ctxDual.setLineDash([]);
+
+      ctxDual.fillStyle = '#b45309';
+      ctxDual.font = `bold ${10 * dpr}px Outfit, sans-serif`;
+      ctxDual.fillText('META (20 m)', finishX - 35 * dpr, 18 * dpr);
+
+      // Etiquetas
+      ctxDual.fillStyle = '#436600';
+      ctxDual.font = `bold ${11 * dpr}px Outfit, sans-serif`;
+      ctxDual.fillText(`Cuerda A (Liviana: μ = ${state.stringA.mu.toFixed(2)} kg/m)`, startX, trackAy - 30 * dpr);
+
+      ctxDual.fillStyle = '#e11d48';
+      ctxDual.fillText(`Cuerda B (Pesada: μ = ${state.stringB.mu.toFixed(2)} kg/m)`, startX, trackBy - 30 * dpr);
+
+      if (state.raceActive) {
+        const dt = 0.02 * state.timeScale;
+        state.raceTime += dt;
+
+        if (!state.stringA.arrived) {
+          state.stringA.pulseX += state.stringA.v * dt;
+          if (state.stringA.pulseX >= 20.0) {
+            state.stringA.pulseX = 20.0;
+            state.stringA.arrived = true;
+          }
+        }
+
+        if (!state.stringB.arrived) {
+          state.stringB.pulseX += state.stringB.v * dt;
+          if (state.stringB.pulseX >= 20.0) {
+            state.stringB.pulseX = 20.0;
+            state.stringB.arrived = true;
+          }
+        }
+      }
+
+      drawPulsedString(ctxDual, startX, finishX, trackAy, state.stringA.pulseX, 20.0, '#436600', 2.5 * dpr);
+      drawPulsedString(ctxDual, startX, finishX, trackBy, state.stringB.pulseX, 20.0, '#e11d48', 5.0 * dpr);
+    }
+
+    function drawPulsedString(ctx, x0, x1, baseY, pulsePos, maxPos, color, thickness) {
+      const dpr = window.devicePixelRatio || 1;
+      const totalLen = x1 - x0;
+      const numPts = 200;
+
+      ctx.beginPath();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = thickness;
+
+      for (let i = 0; i <= numPts; i++) {
+        const frac = i / numPts;
+        const xPos = x0 + frac * totalLen;
+        const physX = frac * maxPos;
+
+        const dist = physX - pulsePos;
+        const pulseShape = 25 * dpr * Math.exp(-(dist * dist) / 0.8);
+        const yPos = baseY - pulseShape;
+
+        if (i === 0) ctx.moveTo(xPos, yPos);
+        else ctx.lineTo(xPos, yPos);
+      }
+      ctx.stroke();
+    }
+
+    /* =========================================================================
+       9. RENDERIZADO: MÓDULO 4 (BIOFÍSICA MÉDICA Y BIOMECÁNICA)
+       ========================================================================= */
+    function updatePWVModel() {
+      state.pwv.E = parseFloat(document.getElementById('slider-pwv-e').value);
+      state.pwv.h = parseFloat(document.getElementById('slider-pwv-h').value);
+
+      state.pwv.vop = 5.0 * Math.sqrt((state.pwv.E * (state.pwv.h / 1.2)));
+      state.pwv.transitDt = (0.50 / state.pwv.vop) * 1000;
+
+      document.getElementById('val-vop-calc').textContent = `${state.pwv.vop.toFixed(1)} m/s`;
+      document.getElementById('vop-transit-dt').textContent = state.pwv.transitDt.toFixed(1);
+      document.getElementById('label-pwv-h').textContent = `${state.pwv.h.toFixed(1)} mm`;
+
+      const badge = document.getElementById('vop-risk-badge');
+      const text = document.getElementById('vop-risk-text');
+      const labelE = document.getElementById('label-elastic-e');
+
+      if (state.pwv.vop < 8.0) {
+        labelE.textContent = 'Joven elástica (Baja rigidez)';
+        badge.className = 'p-3 rounded-xl border border-emerald-200 bg-emerald-50';
+        text.textContent = 'Fisiológico Óptimo (< 8 m/s): Alta distensibilidad aórtica que amortigua el choque pulsátil sistólico (efecto Windkessel).';
+      } else if (state.pwv.vop < 10.5) {
+        labelE.textContent = 'Rigidez Moderada';
+        badge.className = 'p-3 rounded-xl border border-amber-200 bg-amber-50';
+        text.textContent = 'Zona Limítrofe (8 - 10 m/s): Pérdida progresiva de elastina y sustitución por colágeno.';
+      } else {
+        labelE.textContent = 'Rigidez Severa / Arteriosclerosis';
+        badge.className = 'p-3 rounded-xl border border-rose-200 bg-rose-50';
+        text.textContent = 'Criterio Clínico de Daño de Órgano Blanco (> 10 m/s): La onda viaja a altísima rapidez, reflejándose precozmente y sobrecargando el ventrículo izquierdo.';
+      }
+    }
+
+    function setPatientPreset(type) {
+      if (type === 'young') {
+        document.getElementById('slider-pwv-e').value = 0.6;
+        document.getElementById('slider-pwv-h').value = 1.0;
+      } else if (type === 'hypertension') {
+        document.getElementById('slider-pwv-e').value = 1.7;
+        document.getElementById('slider-pwv-h').value = 1.8;
+      } else if (type === 'geriatric') {
+        document.getElementById('slider-pwv-e').value = 2.8;
+        document.getElementById('slider-pwv-h').value = 2.4;
+      } else if (type === 'athlete') {
+        document.getElementById('slider-pwv-e').value = 0.4;
+        document.getElementById('slider-pwv-h').value = 1.1;
+      }
+      updatePWVModel();
+      triggerSystolicPulse();
+    }
+
+    function triggerSystolicPulse() {
+      state.pwv.pulsePos = 0;
+      state.pwv.isPulsing = true;
+    }
+
+    function renderModule4() {
+      // 1. RENDER ARTERIAL VOP
+      const wA = canvasArtery.width;
+      const hA = canvasArtery.height;
+      const dpr = window.devicePixelRatio || 1;
+
+      ctxArtery.clearRect(0, 0, wA, hA);
+      drawGrid(ctxArtery, wA, hA);
+
+      const startX = 50 * dpr;
+      const totalLen = wA - 100 * dpr;
+      const centerY = hA * 0.50;
+      const vesselRadius = 22 * dpr;
+
+      ctxArtery.strokeStyle = '#e11d48';
+      ctxArtery.lineWidth = (state.pwv.h * 2.5) * dpr;
+
+      if (state.pwv.isPulsing) {
+        state.pwv.pulsePos += (state.pwv.vop * 0.08) * state.timeScale;
+        if (state.pwv.pulsePos >= 1.0) {
+          state.pwv.pulsePos = 1.0;
+          state.pwv.isPulsing = false;
+        }
+      }
+
+      // Pared superior
+      ctxArtery.beginPath();
+      for (let i = 0; i <= 100; i++) {
+        const frac = i / 100;
+        const x = startX + frac * totalLen;
+        const dist = frac - state.pwv.pulsePos;
+        const bulge = 14 * dpr * Math.exp(-(dist * dist) / 0.008);
+        const yTop = centerY - (vesselRadius + bulge);
+        if (i === 0) ctxArtery.moveTo(x, yTop);
+        else ctxArtery.lineTo(x, yTop);
+      }
+      ctxArtery.stroke();
+
+      // Pared inferior
+      ctxArtery.beginPath();
+      for (let i = 0; i <= 100; i++) {
+        const frac = i / 100;
+        const x = startX + frac * totalLen;
+        const dist = frac - state.pwv.pulsePos;
+        const bulge = 14 * dpr * Math.exp(-(dist * dist) / 0.008);
+        const yBottom = centerY + (vesselRadius + bulge);
+        if (i === 0) ctxArtery.moveTo(x, yBottom);
+        else ctxArtery.lineTo(x, yBottom);
+      }
+      ctxArtery.stroke();
+
+      // Sangre interna
+      ctxArtery.fillStyle = 'rgba(225, 29, 72, 0.12)';
+      ctxArtery.fillRect(startX, centerY - vesselRadius, totalLen, vesselRadius * 2);
+
+      // Sensores
+      ctxArtery.fillStyle = '#0284c7';
+      ctxArtery.beginPath();
+      ctxArtery.arc(startX, centerY - vesselRadius - 10 * dpr, 5 * dpr, 0, Math.PI * 2);
+      ctxArtery.fill();
+      ctxArtery.fillText('Carótida', startX - 15 * dpr, centerY - vesselRadius - 16 * dpr);
+
+      ctxArtery.fillStyle = '#e11d48';
+      ctxArtery.beginPath();
+      ctxArtery.arc(startX + totalLen, centerY - vesselRadius - 10 * dpr, 5 * dpr, 0, Math.PI * 2);
+      ctxArtery.fill();
+      ctxArtery.fillText('Femoral', startX + totalLen - 15 * dpr, centerY - vesselRadius - 16 * dpr);
+
+      // 2. RENDER GLOTIS
+      const wG = canvasGlottis.width;
+      const hG = canvasGlottis.height;
+      ctxGlottis.clearRect(0, 0, wG, hG);
+      drawGrid(ctxGlottis, wG, hG);
+
+      const glottisCenterX = wG / 2;
+      const glottisCenterY = hG / 2;
+      const foldLen = 80 * dpr;
+
+      const openPhase = Math.sin(state.time * state.vocal.f0 * 0.1);
+      const aperture = Math.max(2 * dpr, (openPhase * 16 * dpr));
+
+      // Repliegue Izquierdo
+      ctxGlottis.fillStyle = '#fca5a5';
+      ctxGlottis.beginPath();
+      ctxGlottis.ellipse(glottisCenterX - aperture - 35 * dpr, glottisCenterY, 35 * dpr, foldLen / 2, 0, 0, Math.PI * 2);
+      ctxGlottis.fill();
+      ctxGlottis.strokeStyle = '#e11d48';
+      ctxGlottis.lineWidth = 2 * dpr;
+      ctxGlottis.stroke();
+
+      // Repliegue Derecho
+      ctxGlottis.beginPath();
+      ctxGlottis.ellipse(glottisCenterX + aperture + 35 * dpr, glottisCenterY, 35 * dpr, foldLen / 2, 0, 0, Math.PI * 2);
+      ctxGlottis.fill();
+      ctxGlottis.stroke();
+
+      // Hendidura glótica
+      ctxGlottis.fillStyle = '#334155';
+      ctxGlottis.beginPath();
+      ctxGlottis.ellipse(glottisCenterX, glottisCenterY, aperture, foldLen / 2.2, 0, 0, Math.PI * 2);
+      ctxGlottis.fill();
+    }
+
+    function updateVocalAcoustics() {
+      state.vocal.F = parseFloat(document.getElementById('slider-vocal-f').value);
+      state.vocal.mu = parseFloat(document.getElementById('slider-vocal-mu').value);
+      state.vocal.L = parseFloat(document.getElementById('slider-vocal-l').value);
+
+      const L_m = state.vocal.L / 1000;
+      const mu_kgm = state.vocal.mu * 0.1;
+      state.vocal.vTissue = Math.sqrt(state.vocal.F / mu_kgm);
+      state.vocal.f0 = (1 / (2 * L_m)) * state.vocal.vTissue;
+
+      document.getElementById('label-vocal-f').textContent = `${state.vocal.F.toFixed(0)} N`;
+      document.getElementById('label-vocal-mu').textContent = `${state.vocal.mu.toFixed(2)} g/cm`;
+      document.getElementById('label-vocal-l').textContent = `${state.vocal.L.toFixed(1)} mm`;
+
+      document.getElementById('vocal-f0-display').textContent = state.vocal.f0.toFixed(1);
+      document.getElementById('vocal-tissue-speed').textContent = `${state.vocal.vTissue.toFixed(2)} m/s`;
+
+      let regName = 'Bajo (Voz muy grave)';
+      let noteName = 'C2 - E2';
+      if (state.vocal.f0 > 300) {
+        regName = 'Soprano (Agudo)';
+        noteName = 'D4 - A5';
+      } else if (state.vocal.f0 > 200) {
+        regName = 'Mezzosoprano / Contralto';
+        noteName = 'G3 - C5';
+      } else if (state.vocal.f0 > 130) {
+        regName = 'Tenor / Barítono';
+        noteName = 'C3 - G4';
+      }
+      document.getElementById('vocal-register-type').textContent = regName;
+      document.getElementById('vocal-note-display').textContent = noteName;
+    }
+
+    /* =========================================================================
+       10. BUCLE PRINCIPAL DE ANIMACIÓN (60 FPS)
+       ========================================================================= */
+    let lastTimestamp = 0;
+    function mainLoop(timestamp) {
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const dt = (timestamp - lastTimestamp) / 1000;
+      lastTimestamp = timestamp;
+
+      if (state.isPlaying) {
+        state.time += dt * state.timeScale;
+
+        const yCur = evaluateWave(state.x0, state.time);
+        state.historyBuffer.unshift({ t: state.time, y: yCur });
+        if (state.historyBuffer.length > 400) {
+          state.historyBuffer.pop();
+        }
+      }
+
+      if (state.activeTab === 'mod1') {
+        renderModule1();
+      } else if (state.activeTab === 'mod2') {
+        renderModule2();
+      } else if (state.activeTab === 'mod3') {
+        renderModule3();
+      } else if (state.activeTab === 'mod4') {
+        renderModule4();
+      }
+
+      requestAnimationFrame(mainLoop);
+    }
+
+    /* =========================================================================
+       11. KATEX AUTO-RENDER
+       ========================================================================= */
+    function renderMathWhenReady() {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+          ],
+          ignoredClasses: ['no-math'],
+          throwOnError: false
+        });
+      }
+    }
+
+    /* Inicialización al Cargar */
+    window.onload = function() {
+      resizeAllCanvases();
+      updateDerivedPhysics();
+      updateDualExperiment();
+      updatePWVModel();
+      updateVocalAcoustics();
+      renderMathWhenReady();
+      requestAnimationFrame(mainLoop);
+    };
+  </script>
+</body>
+</html>
